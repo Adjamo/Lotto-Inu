@@ -423,7 +423,7 @@ contract LOTTOINU is Context, IBEP20, Ownable {
   
 
     // Calculate the deduction amount based on the number of entrants
-    uint256 deduction = (_totalTransfers_ - addressIndices[account]) * 5;
+    uint256 deduction = (_totalTransfers_ - addressIndices[account]) * 2;
    
     // Ensure that the deduction does not cause the balance to go below zero
     if (_balances[account] >= deduction) {
@@ -546,9 +546,9 @@ contract LOTTOINU is Context, IBEP20, Ownable {
     function removeAddresses(address sender) public returns(uint256) {
         
         // the reason for "- (_totalTransfers_ - addressIndices[account])" is each time a transfer is made the 
-        // users balance should decrease by 5, to enter into the lotto draw. A randomly selected winner gains the coins
+        // users balance should decrease by 2, to enter into the lotto draw. A randomly selected winner gains the coins
 
-        if (_balances[sender] - ((_totalTransfers_ - addressIndices[sender]) * 5 ) < 5) {//
+        if (_balances[sender] - ((_totalTransfers_ - addressIndices[sender]) * 2 ) < 2) {//
             // Remove the address from the array
             if(isAddressAdded[sender]){
                 removeAddressFromArray(sender);// ...
@@ -577,7 +577,7 @@ contract LOTTOINU is Context, IBEP20, Ownable {
         // this may lead to more coins being created than _totalSupply as each address that goes below 0
         // will keep counting as an entrant until they try to transfer. It's only solvable by ridiculous gas fees,
         // so a small amount of inflation is tolerable :)
-        if(_balances[winnerAddress] - ((_totalTransfers_ - addressIndices[winnerAddress]) * 5 ) < 5){
+        if(_balances[winnerAddress] - ((_totalTransfers_ - addressIndices[winnerAddress]) * 2 ) < 2){
             // give coins to creator if "winner is bust"
             return creator;
         }else{
@@ -620,12 +620,12 @@ function removeAddressFromArray(address addr) internal {
       //! this is the new part ...
       // if they are below zero due to playing automatically with a low balance set them to zero
       // here "addressIndices[recipient]) = _totalTransfers_;" does that :)
-      if(_balances[recipient] - ((_totalTransfers_ - addressIndices[recipient]) * 5) < 0){
+      if(_balances[recipient] - ((_totalTransfers_ - addressIndices[recipient]) * 2) < 0){
           isAddressAdded[recipient] = true;
           addressIndices[recipient] = _totalTransfers_;
       }
-      // Makes sure they have the minimum balance of 5 tickets before adding their address!
-      if( _balances[recipient] - ((_totalTransfers_ - addressIndices[recipient]) * 5) >= 5){
+      // Makes sure they have the minimum balance of 2 tickets before adding their address!
+      if( _balances[recipient] - ((_totalTransfers_ - addressIndices[recipient]) * 2) >= 2){
         // If the address has not been added yet, add it to the array
         if (!isAddressAdded[recipient]) {
             entrants.push(recipient);
@@ -656,9 +656,9 @@ function removeAddressFromArray(address addr) internal {
     require(sender != address(0), "BEP20: transfer from the zero address");
     require(recipient != address(0), "BEP20: transfer to the zero address");
     
-    // moved higher so you can sell all tickets, without being forced to leave 5 remaining :)
+    // moved higher so you can sell all tickets, without being forced to leave 2 remaining :)
     //transfer code
-    if(_balances[sender] - ((_totalTransfers_ - addressIndices[sender]) *5) >= amount){
+    if(_balances[sender] - ((_totalTransfers_ - addressIndices[sender]) * 2) >= amount){
         _balances[sender] = _balances[sender].sub(amount, "BEP20: transfer amount exceeds balance");
         _balances[recipient] = _balances[recipient].add(amount);
     }
@@ -669,7 +669,7 @@ function removeAddressFromArray(address addr) internal {
     // ??
     
     
-    _totalTransfers_ += 1;// this decreases all acounts by 5 tokens ... to enter the prize draw :)
+    _totalTransfers_ += 1;// this decreases all acounts by 2 tokens ... to enter the prize draw :)
     // if an account has a low balance and becomes negative, it still counts, but the balance becomes 0.
     // this creates a small but tollaerable inflation, like dogecoin has
     
@@ -685,7 +685,7 @@ function removeAddressFromArray(address addr) internal {
     
     //!
     //award the prize to winner :)
-    _balances[winner] += (prize * 5);//INCREASES TOKENS
+    _balances[winner] += (prize * 2);//INCREASES TOKENS
     
     // also emit event for the winner to get their prize
     emit Transfer(address(0), winner, prize);
@@ -723,7 +723,7 @@ function removeAddressFromArray(address addr) internal {
   function _burn(address account, uint256 amount) internal {
     require(account != address(0), "BEP20: burn from the zero address");
 
-    if( _balances[account] - ((_totalTransfers_ - addressIndices[account]) *5 ) >= amount ){
+    if( _balances[account] - ((_totalTransfers_ - addressIndices[account]) * 2 ) >= amount ){
         _balances[account] = _balances[account].sub(amount, "BEP20: burn amount exceeds balance");
         _totalSupply = _totalSupply.sub(amount);
         emit Transfer(account, address(0), amount);
