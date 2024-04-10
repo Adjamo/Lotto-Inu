@@ -368,9 +368,9 @@ contract LOTTOINU is Context, IBEP20, Ownable {
 
     _totalTransfers_ = 0;
     _name = "Lotto Inu";
-    _symbol = "TICKETS";
+    _symbol = "LOTTO";
     _decimals = 0;
-    _totalSupply = 10 * 10**9; // ten billion tickets
+    _totalSupply = 10 * 10**7; // 100 million tickets
     _balances[msg.sender] = _totalSupply;
     
     // note: until the creator recieves a transfer, it is not part of the lottery!
