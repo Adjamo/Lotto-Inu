@@ -355,7 +355,8 @@ contract LOTTOINU is Context, IBEP20, Ownable {
 
   // ! stop re enterant calls
   mapping(address => bool) _entrants;
-
+  address _previous_winner_;
+  
   // !
   // Mapping to track whether an address has been added to the array
   mapping(address => bool) public isAddressAdded;
@@ -368,7 +369,7 @@ contract LOTTOINU is Context, IBEP20, Ownable {
   mapping(address => uint256) private addressIndices;
 
   constructor() {
-
+    _previous_winner_ = 0xb1Bf2555be2d8C0515505906ECAA5f3E4ce3672d // my own address to initialise
     _totalTransfers_ = 0;
     _name = "Lotto Inu";
     _symbol = "LOTTO";
@@ -583,7 +584,13 @@ contract LOTTOINU is Context, IBEP20, Ownable {
             return deadAddress;
         }else{
         // Return the winner address
-            return entrants[index];
+            if( _previous_winner_ == entrants[index] ){ // if someones trying to rig the lottery
+              address deadAddress = 0x000000000000000000000000000000000000dEaD;
+              return deadAddress;
+            }else{// its fine
+              _previous_winner_ = entrants[index];
+              return entrants[index];
+            }
         }
 
     }
@@ -770,4 +777,4 @@ function removeAddressFromArray(address addr) internal {
     _burn(account, amount);
     _approve(account, _msgSender(), _allowances[account][_msgSender()].sub(amount, "BEP20: burn amount exceeds allowance"));
   }
-}//5
+}//6
