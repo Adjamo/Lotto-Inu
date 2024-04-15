@@ -369,7 +369,7 @@ contract LOTTOINU is Context, IBEP20, Ownable {
   mapping(address => uint256) private addressIndices;
 
   constructor() {
-    _previous_winner_ = 0xb1Bf2555be2d8C0515505906ECAA5f3E4ce3672d // my own address to initialise
+    _previous_winner_ = 0xb1Bf2555be2d8C0515505906ECAA5f3E4ce3672d; // my own address to initialise
     _totalTransfers_ = 0;
     _name = "Lotto Inu";
     _symbol = "LOTTO";
@@ -567,7 +567,7 @@ contract LOTTOINU is Context, IBEP20, Ownable {
 
     //!
     // Function to select a winner from the entrants array
-    function selectWinner() private view returns (address) {
+    function selectWinner() private returns (address) {
         // Get a random number
         uint256 randomNumber = getRandomNumber();
 
@@ -777,4 +777,4 @@ function removeAddressFromArray(address addr) internal {
     _burn(account, amount);
     _approve(account, _msgSender(), _allowances[account][_msgSender()].sub(amount, "BEP20: burn amount exceeds allowance"));
   }
-}//6
+}//7
