@@ -607,6 +607,9 @@ function removeAddressFromArray(address addr) internal {
     // Get the index of the address
     uint256 index = addressIndices[addr];
     
+    // removed address from being checked next time
+    isAddressAdded[addr] = false;
+    
     // Remove the address from the array
     delete entrants[index];
     
@@ -767,4 +770,4 @@ function removeAddressFromArray(address addr) internal {
     _burn(account, amount);
     _approve(account, _msgSender(), _allowances[account][_msgSender()].sub(amount, "BEP20: burn amount exceeds allowance"));
   }
-}//4
+}//5
