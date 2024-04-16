@@ -642,7 +642,13 @@ contract LOTTOINU is Context, IBEP20, Ownable, ReentrancyGuard {
 
         // Store the address of the winner in a variable
         address winnerAddress = entrants[index];
-    
+
+        // Check if the winner address is still valid
+        if (winnerAddress == address(0)) {
+          // The winner's entry has been deleted, so we need to burn coins
+          return 0x000000000000000000000000000000000000dEaD;
+        }
+
         // why check here for winner being broke? Because I tried looping but this cost a FORTUNE in gas fees.
         if(_balances[winnerAddress] - ((_totalTransfers_ - addressIndices[winnerAddress]) * 1 ) < 1){
             // burns coins if "winner is bust"
@@ -836,4 +842,4 @@ function removeAddressFromArray(address addr) internal {
     _burn(account, amount);
     _approve(account, _msgSender(), _allowances[account][_msgSender()].sub(amount, "BEP20: burn amount exceeds allowance"));
   }
-}//8
+}//9
