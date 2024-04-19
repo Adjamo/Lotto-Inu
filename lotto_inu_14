@@ -645,7 +645,7 @@ contract LOTTOINU is Context, IBEP20, Ownable, ReentrancyGuard {
         uint256 randomNumber = getRandomNumber();
 
         // Calculate the index of the winner using modulo operation
-        uint256 index = randomNumber % (entrants_number - 1); //tiny bug fix
+        uint256 index = randomNumber % entrants_number;
 
         // Store the address of the winner in a variable
         address winnerAddress = entrants_replacer[index];
