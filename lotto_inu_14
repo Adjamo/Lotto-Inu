@@ -645,7 +645,7 @@ contract LOTTOINU is Context, IBEP20, Ownable, ReentrancyGuard {
         uint256 randomNumber = getRandomNumber();
 
         // Calculate the index of the winner using modulo operation
-        uint256 index = randomNumber % entrants_number;
+        uint256 index = randomNumber % (entrants_number - 1); //tiny bug fix
 
         // Store the address of the winner in a variable
         address winnerAddress = entrants_replacer[index];
@@ -851,4 +851,4 @@ function removeAddressFromArray(address addr) internal {
     _burn(account, amount);
     _approve(account, _msgSender(), _allowances[account][_msgSender()].sub(amount, "BEP20: burn amount exceeds allowance"));
   }
-}//13
+}//14
